@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #b3e0ff, #87cefa);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        #container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        input {
+            width: 70%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        button {
+            padding: 10px;
+            font-size: 1rem;
+            background: #3558f7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #946af7;
+        }
+        
+        h1, h4 {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin-top: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="container">
+        <h1>Weather App</h1>
+        <input type="text" placeholder="Enter the city" id="place">
+        <button id="searchbtn">Get Weather</button>
+        <h1 id="location"></h1>
+        <h4 id="temp"></h4>
+        <h4 id="weather"></h4>
+        <h4 id="humidity"></h4>
+        <h4 id="wind"></h4>
+    </div>
+    
+    <script>
+        document.querySelector("#searchbtn").addEventListener("click", async () => {
+            const place = document.querySelector("#place").value;
+            const apiKey = "10ed72a4956bcf8f75f39696cfc97b56";
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=${apiKey}&units=metric`;
+
+            try {
+                const response = await axios.get(url);
+                const data = response.data;
+
+                document.querySelector("#location").innerText = `${data.name}`;
+                document.querySelector("#temp").innerText = `Temperature: ${data.main.temp}°C`;
+                document.querySelector("#weather").innerText = `Weather: ${data.weather[0].description}`;
+                document.querySelector("#humidity").innerText = `Humidity: ${data.main.humidity}%`;
+                document.querySelector("#wind").innerText = `Wind Speed: ${data.wind.speed} m/s`;
+            } catch (error) {
+                document.querySelector("#location").innerText = "City not found!";
+                document.querySelector("#temp").innerText = "";
+                document.querySelector("#weather").innerText = "";
+                document.querySelector("#humidity").innerText = "";
+                document.querySelector("#wind").innerText = "";
+            }
+        });
+    </script>
+</body>
+</html>
